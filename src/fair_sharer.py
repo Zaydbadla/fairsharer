@@ -11,16 +11,17 @@ def fair_sharer(values, num_iterations, share=0.1):
         list: Neue Liste nach den Iterationen.
     """
     for _ in range(num_iterations):
-        max_value = max(values)
-        max_index = values.index(max_value)
+        max_index = values.index(max(values))  # Finde den Index des höchsten Wertes
+        left_index = (max_index - 1) % n  # Linker Nachbar (zyklisch)
+        right_index = (max_index + 1) % n  # Rechter Nachbar (zyklisch)
 
-        left_index = (max_index - 1) % len(values)
-        right_index = (max_index + 1) % len(values)
+        # Teile den Wert auf
+        transfer = values[max_index] * share
+        values[max_index] -= 2 * transfer  # Ziehe den doppelten Transferwert vom Max-Wert ab
+        values[left_index] += transfer  # Addiere zum linken Nachbarn
+        values[right_index] += transfer  # Addiere zum rechten Nachbarn
 
-        values[max_index] -= 2 * max_value * share
-        values[left_index] += max_value * share
-        values[right_index] += max_value * share
-        values = [int(value) for value in values]
-
-
-    return values
+        # Debug-Ausgabe
+        print(f"Iteration: {_ + 1}")
+        print(f"Max Index: {max_index}, Transfer: {transfer}")
+        print(f"Values: {values}")
